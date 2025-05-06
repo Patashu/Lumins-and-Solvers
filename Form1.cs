@@ -304,6 +304,50 @@ ACTORS
                 this.Tiles = old.Tiles;
             }
 
+            public GameState(string levelData)
+            {
+                var lines = levelData.Split(new[] { '\n' });
+                //ignore lines[0], it's just the name
+                var preamble = lines[1].Split(',');
+                var initialLights = preamble[0];
+                Red = Char.IsUpper(initialLights[0]);
+                Green = Char.IsUpper(initialLights[1]);
+                Blue = Char.IsUpper(initialLights[2]);
+                Anti = Char.IsUpper(initialLights[3]);
+                var dimensions = preamble[1].Split('x').Select(x => int.Parse(x)).ToArray();
+                Tiles = new Tile[dimensions[0], dimensions[1]];
+                //lines[2] is TERRAIN
+                for (int i = 0; i < dimensions[1]; ++i)
+                {
+                    var tiles = lines[3 + i].ToCharArray();
+                    for (int j = 0; j < dimensions[0]; ++j)
+                    {
+                        Tiles[j, i] = CharToTile(tiles[j]);
+                    }
+                }
+                //lines[3]+dimensions[1] is ACTORS
+                var tempActors = new List<Actor>();
+                for (int i = 0; i < dimensions[1]; ++i)
+                {
+                    var actors = lines[4 + dimensions[1] + i].ToCharArray();
+                    for (int j = 0; j < dimensions[0]; ++j)
+                    {
+                        var actor = actors[j];
+                        if (actor != '.')
+                        {
+                            tempActors.Add(CharToActor(actor, j, i));
+                        }
+                    }
+                }
+                Actors = tempActors.ToArray();
+                TouchedOnces = new HashSet<(int, int)>();
+            }
+
+            public object Clone()
+            {
+                return new GameState(this);
+            }
+
             static Tile CharToTile(char c)
             {
                 switch (c)
@@ -363,48 +407,24 @@ ACTORS
                 }
             }
 
-            public GameState(string levelData)
+            public bool ActorCollectsStar(int i)
             {
-                var lines = levelData.Split(new[] { '\n' });
-                //ignore lines[0], it's just the name
-                var preamble = lines[1].Split(',');
-                var initialLights = preamble[0];
-                Red = Char.IsUpper(initialLights[0]);
-                Green = Char.IsUpper(initialLights[1]);
-                Blue = Char.IsUpper(initialLights[2]);
-                Anti = Char.IsUpper(initialLights[3]);
-                var dimensions = preamble[1].Split('x').Select(x => int.Parse(x)).ToArray();
-                Tiles = new Tile[dimensions[0], dimensions[1]];
-                //lines[2] is TERRAIN
-                for (int i = 0; i < dimensions[1]; ++i)
+                for (int j = 0; j < Actors.Length; ++j)
                 {
-                    var tiles = lines[3 + i].ToCharArray();
-                    for (int j = 0; j < dimensions[0]; ++j)
+                    if (i == j)
                     {
-                        Tiles[j, i] = CharToTile(tiles[j]);
+                        continue;
+                    }
+                    if (Actors[j].type == ActorTypes.Star && Actors[j].lives >= 0 && Actors[i].x == Actors[j].x && Actors[i].y == Actors[j].y)
+                    {
+                        //ig stars with extra lives give them all at once?
+                        //it's either that or it loses one life and you can step on it again but that seems less natural
+                        Actors[i].lives += (Actors[j].lives + 1);
+                        Actors[j].lives = -1;
+                        return true;
                     }
                 }
-                //lines[3]+dimensions[1] is ACTORS
-                var tempActors = new List<Actor>();
-                for (int i = 0; i < dimensions[1]; ++i)
-                {
-                    var actors = lines[4 + dimensions[1] + i].ToCharArray();
-                    for (int j = 0; j < dimensions[0]; ++j)
-                    {
-                        var actor = actors[j];
-                        if (actor != '.')
-                        {
-                            tempActors.Add(CharToActor(actor, j, i));
-                        }
-                    }
-                }
-                Actors = tempActors.ToArray();
-                TouchedOnces = new HashSet<(int, int)>();
-            }
-
-            public object Clone()
-            {
-                return new GameState(this);
+                return false;
             }
 
             public bool inBounds(int x, int y)
