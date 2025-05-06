@@ -45,4 +45,6 @@ ACTORS
 ~ = star
 ```
 
+Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0.
+
 Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard/anything past flattened pyramid yet.
