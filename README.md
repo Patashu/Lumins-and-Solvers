@@ -1,5 +1,5 @@
 # Lumins and Solvers
-A Lumins and Shades solver. Made in Visual Studio 2022 as a C# WinForms app.
+A [Lumins and Shades](https://store.steampowered.com/app/653020/Lumins_and_Shades/) solver. Made in Visual Studio 2022 as a C# WinForms app.
 
 For personal use, but you can try it if you want.
 
