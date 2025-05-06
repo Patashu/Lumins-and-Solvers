@@ -1,0 +1,16 @@
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\bin\Debug\net8.0-windows\Lumins and Solvers.exe
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\bin\Debug\net8.0-windows\Lumins and Solvers.deps.json
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\bin\Debug\net8.0-windows\Lumins and Solvers.runtimeconfig.json
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\bin\Debug\net8.0-windows\Lumins and Solvers.dll
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\bin\Debug\net8.0-windows\Lumins and Solvers.pdb
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins_and_Solvers.Form1.resources
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.csproj.GenerateResource.cache
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.GeneratedMSBuildEditorConfig.editorconfig
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.AssemblyInfoInputs.cache
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.AssemblyInfo.cs
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.csproj.CoreCompileInputs.cache
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.dll
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\refint\Lumins and Solvers.dll
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.pdb
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\Lumins and Solvers.genruntimeconfig.cache
+E:\Users\tim\Documents\Godot Projects\Lumins and Solvers\obj\Debug\net8.0-windows\ref\Lumins and Solvers.dll
