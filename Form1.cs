@@ -85,12 +85,18 @@ ACTORS
                         {
                             continue;
                         }
+                        var actorBlocked = false;
                         foreach (var otherActor in currentState.Actors)
                         {
                             if (otherActor.type != ActorTypes.Star && otherActor.x == newPosition[0] && otherActor.y == newPosition[1])
                             {
-                                continue;
+                                actorBlocked = true;
+                                break;
                             }
+                        }
+                        if (actorBlocked)
+                        {
+                            continue;
                         }
 
                         //3b) otherwise, move the actor to that tile and collect the star there. calculate lighting. if THAT actor loses a live, process it.
@@ -126,6 +132,20 @@ ACTORS
 
                         //3c) if we still have enough lumins+shades alive, check if it's in the dictionary of old moves. if it is, nevermind.
                         //if it isn't, add it to old moves and new moves.
+                        var actorsDied = false;
+                        foreach (var newActor in newState.Actors)
+                        {
+                            if (newActor.type != ActorTypes.Star && newActor.lives < 0)
+                            {
+                                //TODO: death tolerance
+                                actorsDied = true;
+                            }
+                        }
+                        if (actorsDied)
+                        {
+                            continue;
+                        }
+
                         var key = newState.ToString();
                         if (seenStates.ContainsKey(key))
                         {
@@ -530,19 +550,53 @@ ACTORS
                 }
             }
 
+            void ActuateButton(Colours color)
+            {
+                switch (color)
+                {
+                    case Colours.Red: Red = !Red; break;
+                    case Colours.Green: Green = !Green; break;
+                    case Colours.Blue: Blue = !Blue; break;
+                    case Colours.Anti: Anti = !Anti; break;
+                }
+            }
+
             public bool UnpressButton(int x, int y)
             {
                 var tile = Tiles[x, y];
                 if (tile is LSButton b && b.type == ButtonTypes.Hold)
                 {
-                    switch (b.color)
-                    {
-                        case Colours.Red: Red = !Red; break;
-                        case Colours.Green: Green = !Green; break;
-                        case Colours.Blue: Blue = !Blue; break;
-                        case Colours.Anti: Anti = !Anti; break;
-                    }
+                    ActuateButton(b.color);
                     return true;
+                }
+                return false;
+            }
+
+            public bool PressButton(int x, int y)
+            {
+                var tile = Tiles[x, y];
+                if (tile is LSButton b)
+                {
+                    switch (b.type)
+                    {
+                        case ButtonTypes.Normal:
+                            ActuateButton(b.color);
+                            return true;
+                        case ButtonTypes.Hold:
+                            ActuateButton(b.color);
+                            return true;
+                        case ButtonTypes.Once:
+                            if (!TouchedOnces.Contains((x, y)))
+                            {
+                                TouchedOnces.Add((x, y));
+                                ActuateButton(b.color);
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                    }
                 }
                 return false;
             }
