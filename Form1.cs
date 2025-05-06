@@ -33,12 +33,12 @@ ACTORS
 ...........
 0..........
 ...........";
-            GoButton_Click(this, new EventArgs());
+            //GoButton_Click(this, new EventArgs());
 #endif
         }
 
         static int[][] directions = new int[][] { [-1, 0], [0, 1], [0, -1], [1, 0] };
-        static char[] directionLabels = new char[] { 'a', 's', 'w', 'd' };
+        static char[] directionLabels = new char[] { 'w', 's', 'n', 'e' };
 
         private void GoButton_Click(object sender, EventArgs e)
         {
@@ -162,10 +162,23 @@ ACTORS
                             //TODO: meta solution enforcement
                             var result = "";
                             var replayState = newState;
+                            var lastWhoMoved = -1;
+                            List<GameState> replayParts = new List<GameState>();
                             while (replayState != null && replayState.WhoMoved >= 0)
                             {
-                                result = replayState.WhoMoved + replayState.HowMoved.ToString() + result;
+                                replayParts.Insert(0, replayState);
                                 replayState = replayState.DescendedFrom;
+                            }
+                            foreach (var replayPart in replayParts)
+                            {
+                                var newPart = "";
+                                if (lastWhoMoved != replayPart.WhoMoved)
+                                {
+                                    lastWhoMoved = replayPart.WhoMoved;
+                                    newPart += lastWhoMoved.ToString();
+                                }
+                                newPart += replayPart.HowMoved.ToString();
+                                result += newPart;
                             }
                             OutputTextBox.Text = result;
                             return;
