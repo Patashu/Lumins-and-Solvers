@@ -42,22 +42,29 @@ ACTORS
 
         private void GoButton_Click(object sender, EventArgs e)
         {
-            var initialState = new GameState(LevelDataTextBox.Text);
-            var nonStarActorCount = 0;
-            for (int i = 0; i < initialState.Actors.Length; ++i)
+            try
             {
-                if (initialState.Actors[i].type != ActorTypes.Star)
+                var initialState = new GameState(LevelDataTextBox.Text);
+                var nonStarActorCount = 0;
+                for (int i = 0; i < initialState.Actors.Length; ++i)
                 {
-                    nonStarActorCount += 1;
+                    if (initialState.Actors[i].type != ActorTypes.Star)
+                    {
+                        nonStarActorCount += 1;
+                    }
+                }
+                for (var i = 0; i <= nonStarActorCount; ++i)
+                {
+                    var result = Solve(i);
+                    if (result)
+                    {
+                        break;
+                    }
                 }
             }
-            for (var i = 0; i <= nonStarActorCount; ++i)
+            catch (Exception ex)
             {
-                var result = Solve(i);
-                if (result)
-                {
-                    break;
-                }
+                OutputTextBox.Text = ex.ToString();
             }
         }
 
@@ -83,8 +90,10 @@ ACTORS
                 novelStates.RemoveAt(0);
 
                 //2) in a loop, try all possible moves. (to try a move, pick an alive non-star actor and a cardinal direction and attempt to move in that direction.)
-                for (int i = 0; i < currentState.Actors.Length; ++i)
+                for (int i_old = 0; i_old < currentState.Actors.Length; ++i_old)
                 {
+                    var who_moved_dummy = currentState.WhoMoved >= 0 ? currentState.WhoMoved : 0;
+                    var i = (i_old + who_moved_dummy) % currentState.Actors.Length;
                     var actor = currentState.Actors[i];
                     if (!(actor.lives >= 0 && actor.type != ActorTypes.Star))
                     {
@@ -503,11 +512,18 @@ ACTORS
                         var tile = Tiles[x, y];
                         if (tile is Obstacle obstacle)
                         {
-                            lit |= LampLit(obstacle.lampColor);
+                            //anti-lamps actually anti-light and it takes precedence
                             if (obstacle.lampColor == LampColours.Anti)
                             {
-                                lit = false;
-                                goto ready;
+                                if (LampLit(obstacle.lampColor))
+                                {
+                                    lit = false;
+                                    goto ready;
+                                }
+                            }
+                            else
+                            {
+                                lit |= LampLit(obstacle.lampColor);
                             }
                         }
                     }

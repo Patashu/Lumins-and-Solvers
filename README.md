@@ -47,4 +47,10 @@ ACTORS
 
 Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Will give the first solution it finds that saves the most lives without care for where the actors end up.
 
-Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard/anything past flattened pyramid yet.
+Meta mechanics aren't supported yet. My plans are to add
+
+1) in terrain or actors (haven't decided yet), you can add rainbow lamps of radius 1-9
+
+2) a third optional section called GOALS, with . for 'don't care', 0123... for 'must have an actor of lives 0123... or higher here'. When the puzzle is won, GOALS is checked, and if it is not satisfied, forbid going to this state.
+
+if I ever get stuck in Night Sky :B

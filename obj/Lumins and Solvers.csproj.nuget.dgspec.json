@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins and Solvers\\Lumins and Solvers.csproj": {}
+    "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Lumins and Solvers.csproj": {}
   },
   "projects": {
-    "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins and Solvers\\Lumins and Solvers.csproj": {
+    "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Lumins and Solvers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins and Solvers\\Lumins and Solvers.csproj",
+        "projectUniqueName": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Lumins and Solvers.csproj",
         "projectName": "Lumins and Solvers",
-        "projectPath": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins and Solvers\\Lumins and Solvers.csproj",
+        "projectPath": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Lumins and Solvers.csproj",
         "packagesPath": "C:\\Users\\patas\\.nuget\\packages\\",
-        "outputPath": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins and Solvers\\obj\\",
+        "outputPath": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "E:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
