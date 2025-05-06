@@ -33,13 +33,127 @@ ACTORS
 ...........
 0..........
 ...........";
-            GoButton_Click(null, new EventArgs());
+            GoButton_Click(this, new EventArgs());
 #endif
         }
 
+        static int[][] directions = new int[][] { [-1, 0], [0, 1], [0, -1], [1, 0] };
+        static char[] directionLabels = new char[] { 'a', 's', 'w', 'd' };
+
         private void GoButton_Click(object sender, EventArgs e)
         {
-            OutputTextBox.Text = new GameState(LevelDataTextBox.Text).ToString();
+            Dictionary<string, GameState> seenStates = new Dictionary<string, GameState>();
+            List<GameState> novelStates = new List<GameState>();
+
+            //0) put the initial state in old moves and new moves. (Also check if it's already solved.)
+            var initialState = new GameState(LevelDataTextBox.Text);
+            if (initialState.Red && initialState.Green && initialState.Blue && initialState.Anti)
+            {
+                OutputTextBox.Text = "It's already solved!";
+                return;
+            }
+            seenStates[initialState.ToString()] = initialState;
+            novelStates.Add(initialState);
+
+            //1) pop a novel state. (if we can't, we're done.)
+            while (novelStates.Count > 0)
+            {
+                var currentState = novelStates[0];
+                novelStates.RemoveAt(0);
+
+                //2) in a loop, try all possible moves. (to try a move, pick an alive non-star actor and a cardinal direction and attempt to move in that direction.)
+                for (int i = 0; i < currentState.Actors.Length; ++i)
+                {
+                    var actor = currentState.Actors[i];
+                    if (!(actor.lives >= 0 && actor.type != ActorTypes.Star))
+                    {
+                        continue;
+                    }
+
+                    for (int d = 0; d < directions.Length; ++d)
+                    {
+                        var direction = directions[d];
+                        var newPosition = new int[] { actor.x + direction[0], actor.y + direction[1] };
+
+                        //3a) if there is a non-star actor or obstacle in that direction or it's oob, nevermind.
+                        if (!currentState.inBounds(newPosition[0], newPosition[1]))
+                        {
+                            continue;
+                        }
+                        var destinationTile = currentState.Tiles[newPosition[0], newPosition[1]];
+                        if (destinationTile is Obstacle)
+                        {
+                            continue;
+                        }
+                        foreach (var otherActor in currentState.Actors)
+                        {
+                            if (otherActor.type != ActorTypes.Star && otherActor.x == newPosition[0] && otherActor.y == newPosition[1])
+                            {
+                                continue;
+                            }
+                        }
+
+                        //3b) otherwise, move the actor to that tile and collect the star there. calculate lighting. if THAT actor loses a live, process it.
+                        //unpress the old button. if the actor is still alive, press the new button.
+                        //(!) check won state, calculate lighting, attempt to kill all actors (which unpresses buttons). if any died, GOTO (!).
+                        var newState = (GameState)currentState.Clone();
+                        var old_x = actor.x;
+                        var old_y = actor.y;
+                        //because Actor is a struct, I have to always access it inside of the array.
+                        var tileUnderActor = newState.Tiles[actor.x, actor.y];
+                        newState.Actors[i].x = newPosition[0];
+                        newState.Actors[i].y = newPosition[1];
+                        newState.ActorCollectsStar(i);
+                        newState.LightActor(i);
+                        if (newState.Actors[i].lives < 0)
+                        {
+                            //TODO: death tolerance
+                            continue;
+                        }
+                        newState.UnpressButton(old_x, old_y);
+                        if (newState.Actors[i].lives >= 0)
+                        {
+                            newState.PressButton(newPosition[0], newPosition[1]);
+                        }
+                        var somethingHappened = true;
+                        var won = false;
+                        while (somethingHappened)
+                        {
+                            somethingHappened = false;
+                            won = won || (newState.Red && newState.Blue && newState.Green && newState.Anti);
+                            somethingHappened = newState.LightAllActorsAndUnpressButtons();
+                        }
+
+                        //3c) if we still have enough lumins+shades alive, check if it's in the dictionary of old moves. if it is, nevermind.
+                        //if it isn't, add it to old moves and new moves.
+                        var key = newState.ToString();
+                        if (seenStates.ContainsKey(key))
+                        {
+                            continue;
+                        }
+                        newState.DescendedFrom = currentState;
+                        newState.WhoMoved = i;
+                        newState.HowMoved = directionLabels[d];
+                        novelStates.Add(newState);
+                        seenStates[key] = newState;
+                        //3d) if it's won, report replay to the user.
+                        if (won)
+                        {
+                            //TODO: meta solution enforcement
+                            var result = "";
+                            var replayState = newState;
+                            while (replayState != null && replayState.WhoMoved >= 0)
+                            {
+                                result = replayState.WhoMoved + replayState.HowMoved + result;
+                                replayState = replayState.DescendedFrom;
+                            }
+                            OutputTextBox.Text = result;
+                            return;
+                        }
+                    }
+                }
+            }
+            OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry.";
         }
 
         public enum Colours
@@ -101,8 +215,8 @@ ACTORS
                 this.color = color;
                 this.type = type;
             }
-            Colours color;
-            ButtonTypes type;
+            public Colours color;
+            public ButtonTypes type;
 
             public override string ToString()
             {
@@ -116,7 +230,7 @@ ACTORS
             {
                 this.lampColor = lampColor;
             }
-            LampColours lampColor;
+            public LampColours lampColor;
 
             public override string ToString()
             {
@@ -133,10 +247,10 @@ ACTORS
                 this.y = y;
                 this.lives = lives;
             }
-            ActorTypes type;
-            int x;
-            int y;
-            int lives;
+            public ActorTypes type;
+            public int x;
+            public int y;
+            public int lives;
 
             public override string ToString()
             {
@@ -168,13 +282,16 @@ ACTORS
 
         public class GameState : ICloneable
         {
-            public Tile[,] Tiles;
-            public Actor[] Actors;
-            public HashSet<(int, int)> TouchedOnces;
-            bool Red;
-            bool Green;
-            bool Blue;
-            bool Anti;
+            public Tile[,]? Tiles;
+            public Actor[]? Actors;
+            public HashSet<(int, int)>? TouchedOnces;
+            public bool Red;
+            public bool Green;
+            public bool Blue;
+            public bool Anti;
+            public GameState? DescendedFrom = null;
+            public int WhoMoved = -1;
+            public char HowMoved = '\0';
 
             private GameState()
             {
@@ -292,10 +409,17 @@ ACTORS
                 return result;
             }
 
+            public bool inBounds(int x, int y)
+            {
+                return x >= 0 && y >= 0 && x < Tiles.GetLength(0) && y < Tiles.GetLength(1);
+            }
+
             public override string ToString()
             {
                 var result = Red.ToString() + Green.ToString() + Blue.ToString() + Anti.ToString();
-                foreach (var actor in Actors)
+                var sortedActors = Actors.ToList();
+                sortedActors.Sort();
+                foreach (var actor in sortedActors)
                 {
                     result += actor.ToString();
                 }
