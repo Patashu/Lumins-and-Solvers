@@ -463,9 +463,9 @@ ACTORS
                 //6) If we have no lives, die (-1) and return true.
                 var lit = false;
 
-                for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++i)
+                for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++x)
                 {
-                    for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++i)
+                    for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++y)
                     {
                         if (!inBounds(x, y))
                         {
