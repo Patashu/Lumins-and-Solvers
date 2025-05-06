@@ -5,6 +5,7 @@ For personal use, but you can try it if you want.
 
 Example level:
 
+```
 Flattened Pyramid - I
 RGbA,11x7
 TERRAIN
@@ -23,10 +24,13 @@ ACTORS
 ...........
 0..........
 ...........
+```
 
 First line is the level name.
+
 Second line is which lamps start on (lower case for off, upper case for on), then a comma, then the dimensions.
 
+```
 TERRAIN
 . = floor
 # = wall
@@ -39,5 +43,6 @@ ACTORS
 0123456789 = lumins (starting lives)
 )!@#$%^&*( = shades (starting lives)
 ~ = star
+```
 
 Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard yet.
