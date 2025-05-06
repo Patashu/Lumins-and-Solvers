@@ -45,4 +45,4 @@ ACTORS
 ~ = star
 ```
 
-Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard yet.
+Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard/anything past flattened pyramid yet.
