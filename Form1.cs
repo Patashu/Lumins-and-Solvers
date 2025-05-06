@@ -282,9 +282,9 @@ ACTORS
 
         public class GameState : ICloneable
         {
-            public Tile[,]? Tiles;
-            public Actor[]? Actors;
-            public HashSet<(int, int)>? TouchedOnces;
+            public Tile[,] Tiles;
+            public Actor[] Actors;
+            public HashSet<(int, int)> TouchedOnces;
             public bool Red;
             public bool Green;
             public bool Blue;
@@ -293,9 +293,15 @@ ACTORS
             public int WhoMoved = -1;
             public char HowMoved = '\0';
 
-            private GameState()
+            public GameState(GameState old)
             {
-
+                this.Red = old.Red;
+                this.Green = old.Green;
+                this.Blue = old.Blue;
+                this.Anti = old.Anti;
+                this.TouchedOnces = new HashSet<(int, int)>(old.TouchedOnces);
+                this.Actors = (Actor[])old.Actors.Clone();
+                this.Tiles = old.Tiles;
             }
 
             static Tile CharToTile(char c)
@@ -398,15 +404,7 @@ ACTORS
 
             public object Clone()
             {
-                var result = new GameState();
-                result.Red = Red;
-                result.Green = Green;
-                result.Blue = Blue;
-                result.Anti = Anti;
-                result.TouchedOnces = new HashSet<(int, int)>(TouchedOnces);
-                result.Actors = (Actor[])Actors.Clone();
-                result.Tiles = Tiles;
-                return result;
+                return new GameState(this);
             }
 
             public bool inBounds(int x, int y)
