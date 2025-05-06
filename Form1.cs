@@ -42,6 +42,27 @@ ACTORS
 
         private void GoButton_Click(object sender, EventArgs e)
         {
+            var initialState = new GameState(LevelDataTextBox.Text);
+            var nonStarActorCount = 0;
+            for (int i = 0; i < initialState.Actors.Length; ++i)
+            {
+                if (initialState.Actors[i].type != ActorTypes.Star)
+                {
+                    nonStarActorCount += 1;
+                }
+            }
+            for (var i = 0; i <= nonStarActorCount; ++i)
+            {
+                var result = Solve(i);
+                if (result)
+                {
+                    break;
+                }
+            }
+        }
+
+        bool Solve(int deathTolerance)
+        {
             Dictionary<string, GameState> seenStates = new Dictionary<string, GameState>();
             List<GameState> novelStates = new List<GameState>();
 
@@ -50,7 +71,7 @@ ACTORS
             if (initialState.Red && initialState.Green && initialState.Blue && initialState.Anti)
             {
                 OutputTextBox.Text = "It's already solved!";
-                return;
+                return true;
             }
             seenStates[initialState.ToString()] = initialState;
             novelStates.Add(initialState);
@@ -111,11 +132,6 @@ ACTORS
                         newState.Actors[i].y = newPosition[1];
                         newState.ActorCollectsStar(i);
                         newState.LightActor(i);
-                        if (newState.Actors[i].lives < 0)
-                        {
-                            //TODO: death tolerance
-                            continue;
-                        }
                         newState.UnpressButton(old_x, old_y);
                         if (newState.Actors[i].lives >= 0)
                         {
@@ -132,16 +148,15 @@ ACTORS
 
                         //3c) if we still have enough lumins+shades alive, check if it's in the dictionary of old moves. if it is, nevermind.
                         //if it isn't, add it to old moves and new moves.
-                        var actorsDied = false;
+                        var actorsDied = 0;
                         foreach (var newActor in newState.Actors)
                         {
                             if (newActor.type != ActorTypes.Star && newActor.lives < 0)
                             {
-                                //TODO: death tolerance
-                                actorsDied = true;
+                                actorsDied += 1;
                             }
                         }
-                        if (actorsDied)
+                        if (actorsDied > deathTolerance)
                         {
                             continue;
                         }
@@ -181,12 +196,13 @@ ACTORS
                                 result += newPart;
                             }
                             OutputTextBox.Text = result;
-                            return;
+                            return true;
                         }
                     }
                 }
             }
             OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry.";
+            return false;
         }
 
         public enum Colours
