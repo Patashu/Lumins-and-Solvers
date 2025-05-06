@@ -45,7 +45,7 @@ ACTORS
 ~ = star
 ```
 
-Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Will give the first solution it finds that saves the most lives without care for where the actors end up.
+Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Optimizes for most lives saved, then lowest number of steps, then somewhat optimizes for least actor switches (not sure how to guarantee this part is optimal but it's good enough).
 
 Meta mechanics aren't supported yet. My plans are to add
 
@@ -54,3 +54,5 @@ Meta mechanics aren't supported yet. My plans are to add
 2) a third optional section called GOALS, with . for 'don't care', 0123... for 'must have an actor of lives 0123... or higher here'. When the puzzle is won, GOALS is checked, and if it is not satisfied, forbid going to this state.
 
 if I ever get stuck in Night Sky :B
+
+Oh, and I don't support whatever's after Flattened Pyramid yet either because I haven't gotten there yet.
