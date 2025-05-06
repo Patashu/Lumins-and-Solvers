@@ -465,7 +465,7 @@ ACTORS
 
                 for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++x)
                 {
-                    for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++y)
+                    for (var y = Actors[i].y - 1; y <= Actors[i].y + 1; ++y)
                     {
                         if (!inBounds(x, y))
                         {
