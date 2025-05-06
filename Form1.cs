@@ -474,7 +474,7 @@ ACTORS
                         var tile = Tiles[x, y];
                         if (tile is Obstacle obstacle)
                         {
-                            lit = LampLit(obstacle.lampColor);
+                            lit |= LampLit(obstacle.lampColor);
                             if (obstacle.lampColor == LampColours.Anti)
                             {
                                 lit = false;
