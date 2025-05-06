@@ -427,6 +427,125 @@ ACTORS
                 return false;
             }
 
+            public bool LightActor(int i)
+            {
+                if (Actors[i].lives < 0 || Actors[i].type == ActorTypes.Star)
+                {
+                    return false;
+                }
+
+                //1-2) First, calculate if the actor i is in light or darkness:
+                //1) If Anti, check the surrounding 3x3 for Anti. If yes, we're in darkness.
+                //2) Check the surrounding 3x3 for non-Anti. For each lamp found, if it's on, we're in light.
+                //3) If we're a lumin and we're in light, return false.
+                //4) If we're a shade and we're in darkness, return false.
+                //5) If we have lives, subtract one, flip lumin/shade and return false.
+                //6) If we have no lives, die (-1) and return true.
+                var lit = false;
+
+                if (Anti)
+                {
+                    for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++i)
+                    {
+                        for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++i)
+                        {
+                            if (!inBounds(x, y))
+                            {
+                                continue;
+                            }
+                            var tile = Tiles[x, y];
+                            if (tile is Obstacle obstacle && obstacle.lampColor == LampColours.Anti)
+                            {
+                                goto ready;
+                            }
+                        }
+                    }
+                }
+
+                for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++i)
+                {
+                    for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++i)
+                    {
+                        if (!inBounds(x, y))
+                        {
+                            continue;
+                        }
+                        var tile = Tiles[x, y];
+                        if (tile is Obstacle obstacle)
+                        {
+                            lit = LampLit(obstacle.lampColor);
+                            if (lit)
+                            {
+                                goto ready;
+                            }
+                        }
+                    }
+                }
+
+                ready:
+                if (Actors[i].type == ActorTypes.Lumin)
+                {
+                    if (lit)
+                    {
+                        return false;
+                    }
+                    Actors[i].lives -= 1;
+                    if (Actors[i].lives >= 0)
+                    {
+                        Actors[i].type = ActorTypes.Shade;
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (!lit)
+                    {
+                        return false;
+                    }
+                    Actors[i].lives -= 1;
+                    if (Actors[i].lives >= 0)
+                    {
+                        Actors[i].type = ActorTypes.Lumin;
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            bool LampLit(LampColours color)
+            {
+                switch (color)
+                {
+                    case LampColours.Red: return Red;
+                    case LampColours.Green: return Green;
+                    case LampColours.Blue: return Blue;
+                    case LampColours.Anti: return Anti;
+                    case LampColours.Yellow: return Red == Green;
+                    case LampColours.Cyan: return Green == Blue;
+                    case LampColours.Magenta: return Blue == Red;
+                    case LampColours.White:
+                    {
+                        //is there a more elegant way to do this?
+                        if (Red)
+                        {
+                            return Green == Blue;
+                        }
+                        else
+                        {
+                            return Green != Blue;
+                        }
+                    }
+                    default: return false;
+                }
+            }
+
             public bool inBounds(int x, int y)
             {
                 return x >= 0 && y >= 0 && x < Tiles.GetLength(0) && y < Tiles.GetLength(1);
