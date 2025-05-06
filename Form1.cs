@@ -443,25 +443,6 @@ ACTORS
                 //6) If we have no lives, die (-1) and return true.
                 var lit = false;
 
-                if (Anti)
-                {
-                    for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++i)
-                    {
-                        for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++i)
-                        {
-                            if (!inBounds(x, y))
-                            {
-                                continue;
-                            }
-                            var tile = Tiles[x, y];
-                            if (tile is Obstacle obstacle && obstacle.lampColor == LampColours.Anti)
-                            {
-                                goto ready;
-                            }
-                        }
-                    }
-                }
-
                 for (var x = Actors[i].x - 1; x <= Actors[i].x + 1; ++i)
                 {
                     for (var y = Actors[i].y - 1; x <= Actors[i].y + 1; ++i)
@@ -474,8 +455,9 @@ ACTORS
                         if (tile is Obstacle obstacle)
                         {
                             lit = LampLit(obstacle.lampColor);
-                            if (lit)
+                            if (obstacle.lampColor == LampColours.Anti)
                             {
+                                lit = false;
                                 goto ready;
                             }
                         }
@@ -483,6 +465,8 @@ ACTORS
                 }
 
                 ready:
+
+                //NEATNESS: I always hate writing 'doubled code' like this
                 if (Actors[i].type == ActorTypes.Lumin)
                 {
                     if (lit)
@@ -526,13 +510,13 @@ ACTORS
                     case LampColours.Red: return Red;
                     case LampColours.Green: return Green;
                     case LampColours.Blue: return Blue;
-                    case LampColours.Anti: return Anti;
+                    case LampColours.Anti: return !Anti;
                     case LampColours.Yellow: return Red == Green;
                     case LampColours.Cyan: return Green == Blue;
                     case LampColours.Magenta: return Blue == Red;
                     case LampColours.White:
                     {
-                        //is there a more elegant way to do this?
+                        //NEATNESS: is there a more elegant way to do this?
                         if (Red)
                         {
                             return Green == Blue;
