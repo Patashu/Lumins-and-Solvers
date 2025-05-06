@@ -601,6 +601,23 @@ ACTORS
                 return false;
             }
 
+            public bool LightAllActorsAndUnpressButtons()
+            {
+                var deadActorIndexes = new List<int>();
+                for (var i = 0; i < Actors.Length; ++i)
+                {
+                    if (LightActor(i))
+                    {
+                        deadActorIndexes.Add(i);
+                    }
+                }
+                foreach (var index in deadActorIndexes)
+                {
+                    UnpressButton(Actors[index].x, Actors[index].y);
+                }
+                return deadActorIndexes.Count > 0;
+            }
+
             public bool inBounds(int x, int y)
             {
                 return x >= 0 && y >= 0 && x < Tiles.GetLength(0) && y < Tiles.GetLength(1);
