@@ -530,6 +530,23 @@ ACTORS
                 }
             }
 
+            public bool UnpressButton(int x, int y)
+            {
+                var tile = Tiles[x, y];
+                if (tile is LSButton b && b.type == ButtonTypes.Hold)
+                {
+                    switch (b.color)
+                    {
+                        case Colours.Red: Red = !Red; break;
+                        case Colours.Green: Green = !Green; break;
+                        case Colours.Blue: Blue = !Blue; break;
+                        case Colours.Anti: Anti = !Anti; break;
+                    }
+                    return true;
+                }
+                return false;
+            }
+
             public bool inBounds(int x, int y)
             {
                 return x >= 0 && y >= 0 && x < Tiles.GetLength(0) && y < Tiles.GetLength(1);
