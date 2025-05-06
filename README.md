@@ -45,6 +45,6 @@ ACTORS
 ~ = star
 ```
 
-Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0.
+Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Will give the first solution it finds that saves the most lives without care for where the actors end up.
 
 Meta mechanics aren't supported yet and I didn't test hold switches/fallen orchard/anything past flattened pyramid yet.
