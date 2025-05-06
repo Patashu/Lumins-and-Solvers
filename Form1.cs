@@ -164,7 +164,7 @@ ACTORS
                             var replayState = newState;
                             while (replayState != null && replayState.WhoMoved >= 0)
                             {
-                                result = replayState.WhoMoved + replayState.HowMoved + result;
+                                result = replayState.WhoMoved + replayState.HowMoved.ToString() + result;
                                 replayState = replayState.DescendedFrom;
                             }
                             OutputTextBox.Text = result;
@@ -380,7 +380,7 @@ ACTORS
                     case 'C': return new Obstacle(LampColours.Cyan);
                     case 'Y': return new Obstacle(LampColours.Yellow);
                     case 'M': return new Obstacle(LampColours.Magenta);
-                    case 'W': return new Obstacle(LampColours.Magenta);
+                    case 'W': return new Obstacle(LampColours.White);
                     case 'A': return new Obstacle(LampColours.Anti);
                     case 'r': return new LSButton(Colours.Red, ButtonTypes.Normal);
                     case 'g': return new LSButton(Colours.Green, ButtonTypes.Normal);

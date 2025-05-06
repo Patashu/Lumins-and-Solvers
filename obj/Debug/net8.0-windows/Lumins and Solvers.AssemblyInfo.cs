@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lumins and Solvers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7e7a1334c9bbdd68b84db7b0ca21c80c1684461")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bff594004b1e55f657b3bf51514a8c4b72fee645")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lumins and Solvers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lumins and Solvers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
