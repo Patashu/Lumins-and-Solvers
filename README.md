@@ -56,3 +56,9 @@ Meta mechanics aren't supported yet. My plans are to add
 if I ever get stuck in Night Sky :B
 
 Oh, and I don't support whatever's after Flattened Pyramid yet either because I haven't gotten there yet.
+
+TODO:
+* goals and rainbow statues as described above
+* The win condition is not 'RGBA', it's 'turn on all the lights'. For example, a level with only CMY lamps can be won with all on or all off.
+* Rainbow statues can hit switches turn 0 and kill actors before a turn is taken. But I'm not sure if they go before or after the first win check, and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches (and if it's not simultaneous, what steps happen in between and how many times).
+* I'm not sure what happens if a rainbow statue starts on top of a star or actor.
