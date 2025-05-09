@@ -3,7 +3,7 @@ A [Lumins and Shades](https://store.steampowered.com/app/653020/Lumins_and_Shade
 
 For personal use, but you can try it if you want.
 
-Example level:
+Example levels:
 
 ```
 Flattened Pyramid - I
@@ -24,6 +24,36 @@ ACTORS
 ...........
 0..........
 ...........
+
+Night Sky - F2
+rGBA,6x8
+TERRAIN
+.....2
+...B..
+.Ar###
+...4b.
+#..R..
+#.##..
+#..G.#
+......
+ACTORS
+..0...
+.....)
+......
+......
+......
+......
+......
+..~...
+GOALS
+......
+......
+......
+......
+......
+......
+..0...
+......
 ```
 
 First line is the level name.
@@ -44,17 +74,16 @@ ACTORS
 )!@#$%^&*( = shades (starting lives)
 qwertyuiop = rainbow statues (radius 1...10)
 ~ = star
+
+GOALS (optional)
+. = don't care
+0123456789 = a lumin or shade with at least that large a number must end here
 ```
 
 Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Optimizes for most lives saved, then lowest number of steps, then somewhat optimizes for least actor switches (not sure how to guarantee this part is optimal but it's good enough).
 
-Meta mechanics aren't supported yet. My plans are to add a third optional section called GOALS, with . for 'don't care', 0123... for 'must have an actor of lives 0123... or higher here'. When the puzzle is won, GOALS is checked, and if it is not satisfied, forbid going to this state.
-
-Oh, and I don't support whatever's in the Cemetary yet either because I haven't gotten there yet.
-
 TODO:
-* goals
-* The win condition is not 'RGBA', it's 'turn on all the lights' (or more specifically, 'no light exists that is off'). For example, a level with only CMY lamps can be won with all on or all off.
-* Rainbow statues can hit switches turn 0 and kill actors before a turn is taken. But I'm not sure if they go before or after the first win check, and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches (and if it's not simultaneous, what steps happen in between and how many times).
-* I'm not sure what happens if a rainbow statue starts on top of a star or actor.
+* Any mechanics beyond Night Sky H.
+* The win condition is not 'RGBA', it's 'turn on all the lights' (or more specifically, 'no light exists that is off'). For example, a level with only CMY lamps can be won with all on or all off. Workaround: Just try solving the level with the initial RGB state flipped and you should get the other set of solutions.
+* Rainbow statues can hit switches turn 0 and kill actors before a turn is taken. But I'm not sure if they go before or after the first win check, and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches (and if it's not simultaneous, what steps happen in between and how many times). I'm also not sure what happens if a rainbow statue starts on top of a star or actor.
 * 'all distinct solutions' mode where it keeps searching after the first solution found

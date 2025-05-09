@@ -1,8 +1,3 @@
-using System.Drawing;
-using System.Runtime.InteropServices.ComTypes;
-using static System.Net.Mime.MediaTypeNames;
-using static Lumins_and_Solvers.Form1;
-
 namespace Lumins_and_Solvers
 {
     public partial class Form1 : Form
@@ -201,12 +196,33 @@ ACTORS
                         newState.DescendedFrom = currentState;
                         newState.WhoMoved = i;
                         newState.HowMoved = directionLabels[d];
-                        novelStates.Add(newState);
                         seenStates[key] = newState;
-                        //3d) if it's won, report replay to the user.
+                        //Check goals.
                         if (won)
                         {
-                            //TODO: meta solution enforcement
+                            var goals_satisfied = true;
+                            foreach (var goal in newState.Goals.Keys)
+                            {
+                                var goal_value = newState.Goals[goal];
+                                if (newState.Actors.Any(a => a.x == goal.Item1 && a.y == goal.Item2 && a.lives >= goal_value))
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    goals_satisfied = false;
+                                    break;
+                                }
+                            }
+                            if (!goals_satisfied)
+                            {
+                                continue; //Should be in seen states but not novel states since we cannot make more moves from it.
+                            }
+                        }
+                        novelStates.Add(newState);
+                        //3d) if it's won (and goals were satisfied), report replay to the user.
+                        if (won)
+                        {
                             var result = "";
                             var replayState = newState;
                             var lastWhoMoved = -1;
@@ -401,6 +417,7 @@ ACTORS
             public Tile[,] Tiles;
             public Actor[] Actors;
             public HashSet<(int, int)> TouchedOnces;
+            public Dictionary<(int, int), int> Goals;
             public bool Red;
             public bool Green;
             public bool Blue;
@@ -418,6 +435,7 @@ ACTORS
                 this.TouchedOnces = new HashSet<(int, int)>(old.TouchedOnces);
                 this.Actors = (Actor[])old.Actors.Clone();
                 this.Tiles = old.Tiles;
+                this.Goals = old.Goals;
             }
 
             public GameState(string levelData)
@@ -455,6 +473,24 @@ ACTORS
                         }
                     }
                 }
+                //then check for optional GOALS
+                Goals = new Dictionary<(int, int), int>();
+                if (lines.Length > (4 + dimensions[1]*2) && lines[4 + dimensions[1] * 2].StartsWith("GOALS"))
+                {
+                    for (int i = 0; i < dimensions[1]; ++i)
+                    {
+                        var goals = lines[5 + dimensions[1]*2 + i].ToCharArray();
+                        for (int j = 0; j < dimensions[0]; ++j)
+                        {
+                            var goal = goals[j];
+                            if (goal != '.')
+                            {
+                                Goals[(j, i)] = (int)(goal - '0');
+                            }
+                        }
+                    }
+                }
+
                 Actors = tempActors.ToArray();
                 TouchedOnces = new HashSet<(int, int)>();
             }
