@@ -42,23 +42,18 @@ rgba = normal switches
 ACTORS
 0123456789 = lumins (starting lives)
 )!@#$%^&*( = shades (starting lives)
+qwertyuiop = rainbow statues (radius 1...10)
 ~ = star
 ```
 
 Output is a solution in the form of 'swap to this actor, then make these north/east/south/west movements'. Actors are assigned in reading order starting at 0. Optimizes for most lives saved, then lowest number of steps, then somewhat optimizes for least actor switches (not sure how to guarantee this part is optimal but it's good enough).
 
-Meta mechanics aren't supported yet. My plans are to add
+Meta mechanics aren't supported yet. My plans are to add a third optional section called GOALS, with . for 'don't care', 0123... for 'must have an actor of lives 0123... or higher here'. When the puzzle is won, GOALS is checked, and if it is not satisfied, forbid going to this state.
 
-1) in terrain or actors (haven't decided yet), you can add rainbow lamps of radius 1-9
-
-2) a third optional section called GOALS, with . for 'don't care', 0123... for 'must have an actor of lives 0123... or higher here'. When the puzzle is won, GOALS is checked, and if it is not satisfied, forbid going to this state.
-
-if I ever get stuck in Night Sky :B
-
-Oh, and I don't support whatever's after Flattened Pyramid yet either because I haven't gotten there yet.
+Oh, and I don't support whatever's in the Cemetary yet either because I haven't gotten there yet.
 
 TODO:
-* goals and rainbow statues as described above
+* goals
 * The win condition is not 'RGBA', it's 'turn on all the lights' (or more specifically, 'no light exists that is off'). For example, a level with only CMY lamps can be won with all on or all off.
 * Rainbow statues can hit switches turn 0 and kill actors before a turn is taken. But I'm not sure if they go before or after the first win check, and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches (and if it's not simultaneous, what steps happen in between and how many times).
 * I'm not sure what happens if a rainbow statue starts on top of a star or actor.

@@ -45,17 +45,46 @@ ACTORS
             try
             {
                 var initialState = new GameState(LevelDataTextBox.Text);
-                var nonStarActorCount = 0;
+
+                //At this point, rainbow statues spawned in should press buttons. This may instantly win the puzzle.
+                //TODO: Rainbow statues can hit switches turn 0, cause an instant win and kill actors before a turn is taken.
+                //But I'm not sure if they go before or after the first win check,
+                //and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches
+                //(and if it's not simultaneous, what steps happen in between and how many times).
+                //Also, I'm not sure what happens if a rainbow statue starts on top of a star or actor.
+                //TODO: Mildly duplicated logic.
                 for (int i = 0; i < initialState.Actors.Length; ++i)
                 {
-                    if (initialState.Actors[i].type != ActorTypes.Star)
+                    if (initialState.Actors[i].type == ActorTypes.RainbowStatue)
                     {
-                        nonStarActorCount += 1;
+                        initialState.PressButton(initialState.Actors[i].x, initialState.Actors[i].y);
                     }
                 }
-                for (var i = 0; i <= nonStarActorCount; ++i)
+                var somethingHappened = true;
+                var won = false;
+                while (somethingHappened)
                 {
-                    var result = Solve(i);
+                    somethingHappened = false;
+                    won = won || (initialState.Red && initialState.Blue && initialState.Green && initialState.Anti);
+                    somethingHappened = initialState.LightAllActorsAndUnpressButtons();
+                }
+                if (won)
+                {
+                    OutputTextBox.Text = "It's already solved!";
+                    return;
+                }
+
+                var mobileActorCount = 0;
+                for (int i = 0; i < initialState.Actors.Length; ++i)
+                {
+                    if (initialState.Actors[i].IsMobile())
+                    {
+                        mobileActorCount += 1;
+                    }
+                }
+                for (var i = 0; i <= mobileActorCount; ++i)
+                {
+                    var result = Solve(initialState, i);
                     if (result)
                     {
                         break;
@@ -68,18 +97,12 @@ ACTORS
             }
         }
 
-        bool Solve(int deathTolerance)
+        bool Solve(GameState initialState, int deathTolerance)
         {
             Dictionary<string, GameState> seenStates = new Dictionary<string, GameState>();
             List<GameState> novelStates = new List<GameState>();
 
-            //0) put the initial state in old moves and new moves. (Also check if it's already solved.)
-            var initialState = new GameState(LevelDataTextBox.Text);
-            if (initialState.Red && initialState.Green && initialState.Blue && initialState.Anti)
-            {
-                OutputTextBox.Text = "It's already solved!";
-                return true;
-            }
+            //0) put the initial state in old moves and new moves.
             seenStates[initialState.ToString()] = initialState;
             novelStates.Add(initialState);
 
@@ -89,13 +112,13 @@ ACTORS
                 var currentState = novelStates[0];
                 novelStates.RemoveAt(0);
 
-                //2) in a loop, try all possible moves. (to try a move, pick an alive non-star actor and a cardinal direction and attempt to move in that direction.)
+                //2) in a loop, try all possible moves. (to try a move, pick an alive mobile actor and a cardinal direction and attempt to move in that direction.)
                 for (int i_old = 0; i_old < currentState.Actors.Length; ++i_old)
                 {
                     var who_moved_dummy = currentState.WhoMoved >= 0 ? currentState.WhoMoved : 0;
                     var i = (i_old + who_moved_dummy) % currentState.Actors.Length;
                     var actor = currentState.Actors[i];
-                    if (!(actor.lives >= 0 && actor.type != ActorTypes.Star))
+                    if (!(actor.lives >= 0 && actor.IsMobile()))
                     {
                         continue;
                     }
@@ -118,7 +141,7 @@ ACTORS
                         var actorBlocked = false;
                         foreach (var otherActor in currentState.Actors)
                         {
-                            if (otherActor.type != ActorTypes.Star && otherActor.x == newPosition[0] && otherActor.y == newPosition[1])
+                            if (otherActor.lives >= 0 && otherActor.type != ActorTypes.Star && otherActor.x == newPosition[0] && otherActor.y == newPosition[1])
                             {
                                 actorBlocked = true;
                                 break;
@@ -160,7 +183,7 @@ ACTORS
                         var actorsDied = 0;
                         foreach (var newActor in newState.Actors)
                         {
-                            if (newActor.type != ActorTypes.Star && newActor.lives < 0)
+                            if (newActor.IsMobile() && newActor.lives < 0)
                             {
                                 actorsDied += 1;
                             }
@@ -204,6 +227,14 @@ ACTORS
                                 newPart += replayPart.HowMoved.ToString();
                                 result += newPart;
                             }
+                            result += Environment.NewLine + "Surviving actors:" + Environment.NewLine;
+                            foreach (var survivingActor in newState.Actors.Where(x => x.IsMobile() && x.lives >= 0))
+                            {
+                                result += (survivingActor.type == ActorTypes.Lumin ? "Lumin " : "Shade ")
+                                    + survivingActor.lives + " at (" + survivingActor.x + "," + survivingActor.y + ")"
+                                    + " standing on " + newState.Tiles[survivingActor.x, survivingActor.y].PrettyPrint()
+                                    + Environment.NewLine;
+                            }
                             OutputTextBox.Text = result;
                             return true;
                         }
@@ -234,6 +265,7 @@ ACTORS
             Lumin,
             Shade,
             Star,
+            RainbowStatue,
         }
 
         public enum LampColours
@@ -264,6 +296,11 @@ ACTORS
             {
                 return ".";
             }
+
+            public virtual string PrettyPrint()
+            {
+                return "Ground";
+            }
         }
 
         public class LSButton : Tile
@@ -280,6 +317,18 @@ ACTORS
             {
                 return color.ToString() + type.ToString();
             }
+
+            public override string PrettyPrint()
+            {
+                var result = color.ToString() + " ";
+                switch (type)
+                {
+                    case ButtonTypes.Normal: result += "Button"; break;
+                    case ButtonTypes.Once: result += "Once Button"; break;
+                    case ButtonTypes.Hold: result += "Hold Button"; break;
+                }
+                return result;
+            }
         }
 
         public class Obstacle : Tile
@@ -291,6 +340,11 @@ ACTORS
             public LampColours lampColor;
 
             public override string ToString()
+            {
+                return lampColor.ToString();
+            }
+
+            public virtual string PrettyPrint()
             {
                 return lampColor.ToString();
             }
@@ -310,6 +364,10 @@ ACTORS
             public int y;
             public int lives;
 
+            public bool IsMobile()
+            {
+                return type == ActorTypes.Lumin || type == ActorTypes.Shade;
+            }
             public override string ToString()
             {
                 return type.ToString() + x.ToString() + y.ToString() + lives.ToString();
@@ -461,6 +519,16 @@ ACTORS
                     case '*': return new Actor(ActorTypes.Shade, x, y, 8);
                     case '(': return new Actor(ActorTypes.Shade, x, y, 9);
                     case '~': return new Actor(ActorTypes.Star, x, y, 0);
+                    case 'q': return new Actor(ActorTypes.RainbowStatue, x, y, 0);
+                    case 'w': return new Actor(ActorTypes.RainbowStatue, x, y, 1);
+                    case 'e': return new Actor(ActorTypes.RainbowStatue, x, y, 2);
+                    case 'r': return new Actor(ActorTypes.RainbowStatue, x, y, 3);
+                    case 't': return new Actor(ActorTypes.RainbowStatue, x, y, 4);
+                    case 'y': return new Actor(ActorTypes.RainbowStatue, x, y, 5);
+                    case 'u': return new Actor(ActorTypes.RainbowStatue, x, y, 6);
+                    case 'i': return new Actor(ActorTypes.RainbowStatue, x, y, 7);
+                    case 'o': return new Actor(ActorTypes.RainbowStatue, x, y, 8);
+                    case 'p': return new Actor(ActorTypes.RainbowStatue, x, y, 9);
                     default: throw new InvalidOperationException("Unrecognized actor: " + c);
                 }
             }
@@ -487,7 +555,7 @@ ACTORS
 
             public bool LightActor(int i)
             {
-                if (Actors[i].lives < 0 || Actors[i].type == ActorTypes.Star)
+                if (Actors[i].lives < 0 || !Actors[i].IsMobile())
                 {
                     return false;
                 }
@@ -526,6 +594,16 @@ ACTORS
                                 lit |= LampLit(obstacle.lampColor);
                             }
                         }
+                    }
+                }
+
+                //also check for rainbow statues (note that rainbow is overriden by anti-light)
+                foreach (var statue in Actors.Where(x => x.type == ActorTypes.RainbowStatue))
+                {
+                    var kingsDistance = Math.Max(Math.Abs(statue.x - Actors[i].x), Math.Abs(statue.y - Actors[i].y));
+                    if ((statue.lives + 1) >= kingsDistance)
+                    {
+                        return false;
                     }
                 }
 
