@@ -86,5 +86,4 @@ TODO:
 * Any mechanics beyond Night Sky H.
 * The win condition is not 'RGBA', it's 'turn on all the lights' (or more specifically, 'no light exists that is off'). For example, a level with only CMY lamps can be won with all on or all off. Workaround: Just try solving the level with the initial RGB state flipped and you should get the other set of solutions.
 * Rainbow statues can hit switches turn 0 and kill actors before a turn is taken. But I'm not sure if they go before or after the first win check, and I'm not sure if their switch hitting is simultaneous with, before, or after normal actors also starting on switches (and if it's not simultaneous, what steps happen in between and how many times). I'm also not sure what happens if a rainbow statue starts on top of a star or actor.
-* 'all distinct solutions' mode where it keeps searching after the first solution found
 * It would be cool to have a feature like 'here's how two puzzles overlap, solve them collectively/here's how a puzzle interacts with the overworld, figure out the solution for me' but I'm uncertain how to approach it.
