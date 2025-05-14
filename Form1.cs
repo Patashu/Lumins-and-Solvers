@@ -276,7 +276,7 @@ ACTORS
             }
             if (outputText == "")
             {
-                OutputTextBox.Text = deathTolerance + " deaths: Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine + Environment.NewLine;
+                outputText = deathTolerance + " deaths: Checked " + seenStates.Count + " states and found no new solution, sorry." + Environment.NewLine + Environment.NewLine;
             }
             OutputTextBox.Text += outputText;
             return false;
