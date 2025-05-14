@@ -258,7 +258,7 @@ ACTORS
                             {
                                 continue;
                             }
-                            outputText += result + Environment.NewLine + Environment.NewLine;
+                            outputText += result + Environment.NewLine;
                             if (!AllDistinctSolutionsCheckBox.Checked)
                             {
                                 OutputTextBox.Text += outputText;
@@ -277,7 +277,7 @@ ACTORS
             OutputTextBox.Text += outputText;
             if (OutputTextBox.Text == "")
             {
-                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry.";
+                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine;
             }
             return false;
         }
