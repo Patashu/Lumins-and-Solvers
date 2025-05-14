@@ -5,10 +5,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D05A8F23-8A48-45C8-90CB-A334ABB82498}|Lumins and Solvers.csproj|e:\\users\\tim\\documents\\godot projects\\lumins-and-solvers\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D05A8F23-8A48-45C8-90CB-A334ABB82498}|Lumins and Solvers.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D05A8F23-8A48-45C8-90CB-A334ABB82498}|Lumins and Solvers.csproj|e:\\users\\tim\\documents\\godot projects\\lumins-and-solvers\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{D05A8F23-8A48-45C8-90CB-A334ABB82498}|Lumins and Solvers.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,37 +14,25 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Form1.cs",
-              "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Form1.cs",
-              "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAPIAAAAAAAAAAAAIwAYBAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T07:32:11.914Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Form1.cs [Design]",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
               "DocumentMoniker": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
-              "ToolTip": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Form1.cs [Design]",
-              "RelativeToolTip": "Form1.cs [Design]",
+              "ToolTip": "E:\\Users\\tim\\Documents\\Godot Projects\\Lumins-and-Solvers\\Form1.cs*",
+              "RelativeToolTip": "Form1.cs*",
+              "ViewState": "AgIAAOsAAAAAAAAAAAAUwAMBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-14T11:42:00.728Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2025-05-06T07:32:11.914Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             }
           ]
         }

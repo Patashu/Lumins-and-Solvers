@@ -42,6 +42,7 @@
             LevelDataTextBox.Location = new Point(12, 34);
             LevelDataTextBox.Multiline = true;
             LevelDataTextBox.Name = "LevelDataTextBox";
+            LevelDataTextBox.ScrollBars = ScrollBars.Vertical;
             LevelDataTextBox.Size = new Size(374, 371);
             LevelDataTextBox.TabIndex = 0;
             // 
@@ -51,6 +52,7 @@
             OutputTextBox.Location = new Point(414, 34);
             OutputTextBox.Multiline = true;
             OutputTextBox.Name = "OutputTextBox";
+            OutputTextBox.ScrollBars = ScrollBars.Vertical;
             OutputTextBox.Size = new Size(374, 371);
             OutputTextBox.TabIndex = 1;
             // 

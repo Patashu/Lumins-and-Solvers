@@ -223,7 +223,6 @@ ACTORS
                                 continue; //Should be in seen states but not novel states since we cannot make more moves from it.
                             }
                         }
-                        novelStates.Add(newState);
                         //3d) if it's won (and goals were satisfied), report replay to the user.
                         if (won)
                         {
@@ -255,13 +254,23 @@ ACTORS
                                     + " standing on " + newState.Tiles[survivingActor.x, survivingActor.y].PrettyPrint()
                                     + Environment.NewLine;
                             }
+                            if (OutputTextBox.Text.Contains(result) || outputText.Contains(result))
+                            {
+                                continue;
+                            }
                             outputText += result + Environment.NewLine + Environment.NewLine;
                             if (!AllDistinctSolutionsCheckBox.Checked)
                             {
                                 OutputTextBox.Text += outputText;
                                 return true;
                             }
+                            else
+                            {
+                                continue;
+                            }
                         }
+                        //3e) If it wasn't won, we can add it to novelStates and continue searching from here.
+                        novelStates.Add(newState);
                     }
                 }
             }
@@ -672,6 +681,9 @@ ACTORS
                     }
                     else
                     {
+                        //Banish actor so their location of death doesn't matter for state uniqueness.
+                        Actors[i].x = 0;
+                        Actors[i].y = 0;
                         return true;
                     }
                 }
@@ -689,6 +701,9 @@ ACTORS
                     }
                     else
                     {
+                        //Banish actor so their location of death doesn't matter for state uniqueness.
+                        Actors[i].x = 0;
+                        Actors[i].y = 0;
                         return true;
                     }
                 }
