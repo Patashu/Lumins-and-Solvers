@@ -33,6 +33,7 @@
             label1 = new Label();
             label2 = new Label();
             GoButton = new Button();
+            AllDistinctSolutionsCheckBox = new CheckBox();
             SuspendLayout();
             // 
             // LevelDataTextBox
@@ -81,11 +82,22 @@
             GoButton.UseVisualStyleBackColor = true;
             GoButton.Click += GoButton_Click;
             // 
+            // AllDistinctSolutionsCheckBox
+            // 
+            AllDistinctSolutionsCheckBox.AutoSize = true;
+            AllDistinctSolutionsCheckBox.Location = new Point(445, 418);
+            AllDistinctSolutionsCheckBox.Name = "AllDistinctSolutionsCheckBox";
+            AllDistinctSolutionsCheckBox.Size = new Size(135, 19);
+            AllDistinctSolutionsCheckBox.TabIndex = 5;
+            AllDistinctSolutionsCheckBox.Text = "All Distinct Solutions";
+            AllDistinctSolutionsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(AllDistinctSolutionsCheckBox);
             Controls.Add(GoButton);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -105,5 +117,6 @@
         private Label label1;
         private Label label2;
         private Button GoButton;
+        private CheckBox AllDistinctSolutionsCheckBox;
     }
 }

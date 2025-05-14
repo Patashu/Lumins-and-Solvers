@@ -37,6 +37,8 @@ ACTORS
 
         private void GoButton_Click(object sender, EventArgs e)
         {
+            OutputTextBox.Text = "";
+
             try
             {
                 var initialState = new GameState(LevelDataTextBox.Text);
@@ -94,6 +96,8 @@ ACTORS
 
         bool Solve(GameState initialState, int deathTolerance)
         {
+            var outputText = "";
+
             Dictionary<string, GameState> seenStates = new Dictionary<string, GameState>();
             List<GameState> novelStates = new List<GameState>();
 
@@ -251,13 +255,21 @@ ACTORS
                                     + " standing on " + newState.Tiles[survivingActor.x, survivingActor.y].PrettyPrint()
                                     + Environment.NewLine;
                             }
-                            OutputTextBox.Text = result;
-                            return true;
+                            outputText += result + Environment.NewLine + Environment.NewLine;
+                            if (!AllDistinctSolutionsCheckBox.Checked)
+                            {
+                                OutputTextBox.Text += outputText;
+                                return true;
+                            }
                         }
                     }
                 }
             }
-            OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry.";
+            OutputTextBox.Text += outputText;
+            if (OutputTextBox.Text == "")
+            {
+                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry.";
+            }
             return false;
         }
 
