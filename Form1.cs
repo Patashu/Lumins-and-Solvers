@@ -274,11 +274,11 @@ ACTORS
                     }
                 }
             }
-            OutputTextBox.Text += outputText;
-            if (OutputTextBox.Text == "")
+            if (outputText == "")
             {
-                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine + Environment.NewLine;
+                OutputTextBox.Text = deathTolerance + " deaths: Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine + Environment.NewLine;
             }
+            OutputTextBox.Text += outputText;
             return false;
         }
 
