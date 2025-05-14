@@ -277,7 +277,7 @@ ACTORS
             OutputTextBox.Text += outputText;
             if (OutputTextBox.Text == "")
             {
-                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine;
+                OutputTextBox.Text = "Checked " + seenStates.Count + " states and found no solution, sorry." + Environment.NewLine + Environment.NewLine;
             }
             return false;
         }
