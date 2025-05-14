@@ -204,7 +204,7 @@ ACTORS
                             foreach (var goal in newState.Goals.Keys)
                             {
                                 var goal_value = newState.Goals[goal];
-                                if (newState.Actors.Any(a => a.x == goal.Item1 && a.y == goal.Item2 && a.lives >= goal_value))
+                                if (newState.Actors.Any(a => a.x == goal.Item1 && a.y == goal.Item2 && a.IsMobile() && a.lives >= goal_value))
                                 {
                                     continue;
                                 }
@@ -360,7 +360,7 @@ ACTORS
                 return lampColor.ToString();
             }
 
-            public virtual string PrettyPrint()
+            public override string PrettyPrint()
             {
                 return lampColor.ToString();
             }
