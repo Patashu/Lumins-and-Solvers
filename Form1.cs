@@ -407,6 +407,10 @@ ACTORS
             }
             public override string ToString()
             {
+                if (lives < 0)
+                {
+                    return type.ToString() + lives.ToString();
+                }
                 return type.ToString() + x.ToString() + y.ToString() + lives.ToString();
             }
 
@@ -681,9 +685,6 @@ ACTORS
                     }
                     else
                     {
-                        //Banish actor so their location of death doesn't matter for state uniqueness.
-                        Actors[i].x = 0;
-                        Actors[i].y = 0;
                         return true;
                     }
                 }
@@ -701,9 +702,6 @@ ACTORS
                     }
                     else
                     {
-                        //Banish actor so their location of death doesn't matter for state uniqueness.
-                        Actors[i].x = 0;
-                        Actors[i].y = 0;
                         return true;
                     }
                 }
